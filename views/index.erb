@@ -1,20 +1,20 @@
 <h1>To Do</h1>
 
-<p>Create a new list:</p>
+<p>Welcome to your Hair Salon database:</p>
 
 <form action="/stylists" method="post">
   <label for="name">Enter Stylists:</label>
   <input id="name" name="name" type="text">
 
-  <button type="submit">Add list</button>
+  <button type="submit">Add Stylist</button>
 </form>
 
-<% if @lists.any?() %>
+<% if @stylists.any?() %>
 <p>Check on stylist to see how many clients each has:</p>
 
 <ul>
-  <% @lists.each do |list| %>
-  <li><a href="/lists/<%= list.id() %>"><%= list.name() %></a></li>
+  <% @stylists.each do |list| %>
+  <li><a href="/stylists/<%= list.id() %>"><%= list.name() %></a></li>
   <% end %>
 </ul>
 <% else %>
