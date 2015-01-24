@@ -1,5 +1,21 @@
 Hairsalon APP
 
+This App is an excercise in database using Postgres. Here a salon owner can view his/her stylists, and see
+which clients belong to which stylist. The database for clients includes a phone number to allow easy contact
+in case of expansion should stylists move to another location.
 
-Using Postgres SQL Database.
+Future versions of this database will include email, as well as a log to see how frequently they visit each
+stylist. This can lead to better data analytics which in turn can lead to better business strategy.
+
+Known Bugs:
+
+At this juncture, the client database is causing issue by not saving. Currently the Sinatra app pulls up the
+main page, and adds stylists, but does not correspond ids so that the app will be fully functioning.
+
+Once again, this is being attributed by a failure in the .save() method in the Client class. 
+
+Notes:
+Written in Ruby with Sinatra framework and  Postgres SQL Database by Shimran George.
+
+Contact: shimranbgeorge@gmail.com
 

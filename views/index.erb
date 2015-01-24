@@ -13,10 +13,10 @@
 <p>Check on stylist to see how many clients each has:</p>
 
 <ul>
-  <% @stylists.each do |list| %>
-  <li><a href="/stylists/<%= list.id() %>"><%= list.name() %></a></li>
+  <% @stylists.each do |stylist| %>
+  <li><a href="/stylists/<%= stylist.id() %>"><%= stylist.name() %></a></li>
   <% end %>
 </ul>
 <% else %>
-<p>There are no lists yet!</p>
+<p>You have no employees!</p>
 <% end %>
