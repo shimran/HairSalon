@@ -1,27 +1,40 @@
-<h1>Add a client to <%= @stylists.name() %> </h1>
+<h1>Add a customer to <%= @stylist.name() %>'s List </h1>
 
 <form action="/clients" method="post">
-  <input id="stylists_id" name="stylists_id" type="hidden" value="<%= @stylists.id() %>">
-
-  <label for="name">Client's Name:</label>
-  <input id="name" name="name" type="name">
-
-  <label for="phone">Client's Phone Number:</label>
-  <input id="phone" name="phone" type="phone">
-  <button type="submit">Add Client</button>
+  <input id="stylist_id" name="stylist_id" type="hidden" value="<%= @stylist.id() %>">
+  <label for="name">Customer Name:</label>
+  <input id="name" name="name" type="text">
+  <label for="phone_number">Phone Number:</label>
+  <input id="phone_number" name="phone_number" type="text">
+  <button type="submit">Add Customer</button>
 </form>
 
-<% if @stylists.clients().any?() %>
-<h3>Here are all the clients that see this stylist:</h3>
+<% if @stylist.clients().any?() %>
 
+<h3>Here's all <%= @stylist.name() %>'s clients:</h3>
 <ul>
-  <% @stylists.clientss().each() do |stylist| %>
-  <li><%= stylist.name() %></li>
-  <li><%= stylist.phone() %></li>
+  <% @stylist.clients().each() do |customer| %>
+  <li>
+    <%= customer.name() %>, <%= customer.phone_number() %>
+
+    <form action="/clients/<%= customer.id() %>" method="post">
+      <input name="_method" type="hidden" value="delete">
+      <button type="submit">Delete This Customer</button>
+    </form>
+  </li>
   <% end %>
+
 </ul>
 <% else %>
-<p>This stylist has no clients!</p>
+<p>He has no clients yet.</p>
 <% end %>
 
-<a href="/">Return to Main Page</a>
+
+<form method="link" action="/stylists/<%= @stylist.id() %>/edit">
+  <input type="submit" value="Edit <%= @stylist.name() %>'s Name">
+</form>
+<form action="/stylists-1/<%= @stylist.id() %>" method="post">
+  <input name="_method" type="hidden" value="delete">
+  <button type="submit">Delete <%= @stylist.name() %> the Stylist</button>
+</form>
+<p><a href="/">Return to Main Page</a></p>
