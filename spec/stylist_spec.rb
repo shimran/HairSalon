@@ -1,62 +1,92 @@
 require('spec_helper')
 
-describe(Stylists) do
-
-  describe(".all") do
-    it('is empty at first') do
-      expect(Stylists.all()).to(eq([]))
-    end
-  end
-
+describe(Stylist) do
 
   describe('#name') do
-    it('returns the name of the station') do
-      test_stylist= Stylists.new(:name => "John Smith", :id => nil)
-      expect(test_stylist.name()).to(eq("John Smith"))
+    it('will return the name of the stylist') do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
+      expect(test_stylist.name()).to(eq("James Maynard"))
     end
   end
 
-  describe('#stylist_id') do
-    it ('returns the employee iD of the stylist') do
-      test_stylist = Stylists.new(:name => "John Smith", :id => nil)
-      test_stylist.save()
-      expect(test_stylist.id()).to(be_an_instance_of(Fixnum))
+  describe('#phone_number') do
+    it('will return the phone number of the stylist') do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
+      expect(test_stylist.phone_number()).to(eq(5038872974))
     end
   end
 
-  describe('#save')do
-    it('saves each new stylist to the table') do
-      test_stylist = Stylists.new({:name => "Kameron Johnson", :id => nil})
+  describe('#save') do
+    it('will save a new stylist into hairsalonx database') do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
       test_stylist.save()
-      expect(Stylists.all()).to(eq([test_stylist]))
+      expect(Stylist.all()).to(eq([test_stylist]))
+    end
+  end
+
+  describe('.all') do
+    it('will have an empty hairsalon database') do
+      expect(Stylist.all()).to(eq([]))
     end
   end
 
   describe('#==') do
-    it("is the same stylist if it has the same name and ID") do
-     stylist1 = Stylists.new({:name => "Kameron Johnson", :id => 1})
-     stylist2 = Stylists.new({:name => "Kameron Johnson", :id => 1})
-     expect(stylist1).to(eq(stylist2))
+    it('will show that Stylist instances with the same details will return as equal') do
+      test_stylist1 = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
+      test_stylist2 = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
+      expect(test_stylist1).to(eq(test_stylist2))
     end
   end
-  describe("#clients") do
-    it("returns an list of clients for the stylist") do
-      test_stylist = Stylists.new({:name => "Jack Johnson", :id => nil})
-      test_stylist.save()
-      test_client = Clients.new({:name => "Jared Hinrichs", :phone => "5038872974", :list_id => test_stylist.id()})
-      test_client.save()
-      test_client2 = Clients.new({:name => "Lance Hinrichs", :phone => "5037202451", :list_id => test_stylist.id()})
-      test_client2.save()
-      expect(test_stylist.clients()).to(eq([test_client, test_client2]))
-    end
-  end
+
   describe(".find") do
-    it("returns a list by its ID number") do
-      test_stylist = Stylists.new({:name => "Kameron Johnson", :id => nil})
+    it("returns a stylist instance by his id") do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
       test_stylist.save()
-      test_stylist2 = Stylists.new({:name => "Kameron Johnson", :id => nil})
-      test_stylist2.save()
-      expect(Stylists.find(test_stylist2.id())).to(eq(test_stylist2))
+      test_stylist1 = Stylist.new({:name => "Jared Hinrichs", :phone_number => 5037202451})
+      test_stylist1.save()
+      expect(Stylist.find(test_stylist1.id())).to(eq(test_stylist1))
+    end
+  end
+
+  describe("#clients") do
+    it("returns an array of clients for the stylist") do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974, :id => nil})
+      test_stylist.save()
+      test_client1 = Client.new({:name => "Lance Hinrichs", :phone_number => 5039019798, :stylist_id => test_stylist.id()})
+      test_client1.save()
+      test_client2 = Client.new({:name => "Richard Rethemyer", :phone_number => 4159900464, :stylist_id => test_stylist.id()})
+      test_client2.save()
+      expect(test_stylist.clients()).to(eq([test_client1, test_client2]))
+    end
+  end
+
+  describe("#edit") do
+    it("lets you edit a stylist's name in the database") do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
+      test_stylist.save()
+      test_stylist.edit({:name => "Jared Hinrichs"})
+      expect(test_stylist.name()).to(eq("Jared Hinrichs"))
+    end
+  end
+
+  describe("#delete") do
+    it("lets you delete a stylist from the database") do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
+      test_stylist.save()
+      test_stylist1 = Stylist.new({:name => "Jared Hinrichs", :phone_number => 5037202451})
+      test_stylist1.save()
+      test_stylist.delete()
+      expect(Stylist.all()).to(eq([test_stylist1]))
+    end
+    it("deletes a list's tasks from the database") do
+      test_stylist = Stylist.new({:name => "James Maynard", :phone_number => 5038872974})
+      test_stylist.save()
+      test_client1 = Client.new({:name => "Lance Hinrichs", :phone_number => 321, :stylist_id => test_stylist.id()})
+      test_client1.save()
+      test_client2 = Client.new({:name => "Richard Rethemyer", :phone_number => 4159900464, :stylist_id => test_stylist.id()})
+      test_client2.save()
+      test_stylist.delete()
+      expect(Client.all()).to(eq([]))
     end
   end
 end
